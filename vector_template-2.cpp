@@ -26,16 +26,19 @@ public:
     void addNewItem(Item<T> newItem) {
         for (const auto& item : items) {
             if (item.name == newItem.name) {
-                throw "Item is already present in inventory";
+                std::cout << "Item is already present in inventory" << std::endl;
+                return;
             }
         }
         items.push_back(newItem);
+        std::cout << "Added item: " << newItem.name << std::endl;
     }
 
     void increaseQuantity(T itemName, int quantity) {
         for (auto& item : items) {
             if (item.name == itemName) {
                 item.quantity += quantity;
+                std::cout << "Quantity of " << itemName << " has increased by " << quantity << ". Now at " << item.quantity << "." << std::endl;
                 return;
             }
         }
@@ -48,6 +51,7 @@ public:
                 item.expiration = expiration;
                 item.category = category;
                 item.quantity = quantity;
+                std::cout << "Updated item: " << itemName << std::endl;
                 return;
             }
         }
@@ -58,6 +62,7 @@ public:
         for (auto it = items.begin(); it != items.end(); ++it) {
             if (it->name == itemName) {
                 items.erase(it);
+                std::cout << "Removed item: " << itemName << std::endl;
                 return;
             }
         }
@@ -71,7 +76,11 @@ public:
     void searchItem(T itemName) {
         for (const auto& item : items) {
             if (item.name == itemName) {
-                std::cout << "Item found: " << item.name << std::endl;
+                std::cout << "Query for " << itemName << "." << std::endl;
+                std::cout << "Item = " << item.name << "." << std::endl;
+                std::cout << "Expiration Date = " << item.expiration << "." << std::endl;
+                std::cout << "Category = " << item.category << "." << std::endl;
+                std::cout << "Quantity = " << item.quantity << "." << std::endl;
                 return;
             }
         }
@@ -110,10 +119,23 @@ public:
     void schedule(Appointment<T> newAppointment) {
         for (const auto& appointment : ap) {
             if (appointment.CWID == newAppointment.CWID) {
-                throw "You have already scheduled an appointment!!!";
+                std::cout << "You have already scheduled an appointment!!!" << std::endl;
+                return;
             }
         }
         ap.push_back(newAppointment);
+        std::cout << newAppointment.CWID << ", your appointment has been scheduled." << std::endl;
+    }
+
+    void cancelAppointment(T CWID) {
+        for (auto it = ap.begin(); it != ap.end(); ++it) {
+            if (it->CWID == CWID) {
+                std::cout << "Appointment for CWID " << CWID << " has been cancelled." << std::endl;
+                ap.erase(it);
+                return;
+            }
+        }
+        std::cout << "No appointment found for CWID " << CWID << "." << std::endl;
     }
 
     void Total_appointments(T date, T time) {
@@ -123,13 +145,7 @@ public:
                 count++;
             }
         }
-        std::cout << "Total appointments on " << date << " at " << time << ": " << count << std::endl;
-    }
-
-    void removeRecent() {
-        if (!ap.empty()) {
-            ap.pop_back();
-        }
+        std::cout << "There are " << count << " total appointments on " << date << ", " << time << "." << std::endl;
     }
 
     void display() {
@@ -157,30 +173,38 @@ int main() {
     try {
         i1.updateItem("bar","09/12/2023","Snacks",3);
     } catch(const char* msg) {
-        std::cout << msg << std::endl;
+        std::cout << "Could not update Protien bar. " << msg << std::endl;
+    }
+    i1.displayItems();
+    try {
+        i1.updateItem("bar","09/12/2023","Snacks",3);
+    } catch(const char* msg) {
+        std::cout << "Could not update Protien bar. " << msg << std::endl;
     }
     i1.displayItems();
     i1.updateItem("Cerels","09/27/2023","Regular",4);
     i1.displayItems();
     i1.Total();
     try {
-        i1.removeItem("Bread");
+        i1.searchItem("bar");
     } catch(const char* msg) {
         std::cout << msg << std::endl;
     }
-    try {
-        i1.removeItem("Milk");
-    } catch(const char* msg) {
-        std::cout << msg << std::endl;
-    }
-    i1.displayItems();
-    try {
-        i1.searchItem("Cerels");
-    } catch(const char* msg) {
-        std::cout << msg << std::endl;
-    }
-    Appointment<std::string> a1("John Bob","09/12/2023","9:30AM","889456723");
-    Appointment<std::string> a2("Jim Lee","09/12/2023","10:30AM","883476923");
-    Appointment<std::string> a3("Chris Lynn","09/12/2023","12:00PM","879455714");
-    Appointment<std::string> a4("Arnav Shah","09/12/2023","12:00PM","879459583");
-    AppointmentSystem<std::string> s1;}
+
+    AppointmentSystem<std::string> a1;
+    Appointment<std::string> A1("John Bob","09/12/2023","9:30 AM","889456723");
+    a1.schedule(A1);
+    Appointment<std::string> A2("Jim Lee","09/12/2023","10:30 AM","883476923");
+    a1.schedule(A2);
+    Appointment<std::string> A3("Chris Lynn","09/12/2023","12:00 PM","879455714");
+    a1.schedule(A3);
+    Appointment<std::string> A4("Arnav Shah","09/12/2023","12:00 PM","879459583");
+    a1.schedule(A4);
+    a1.display();
+    a1.Total_appointments("09/12/2023","12:00 PM");
+    a1.cancelAppointment("879459583");
+    a1.display();
+    a1.Total_appointments("09/12/2023","12:00 PM");
+
+    return 0;
+}
