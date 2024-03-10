@@ -42,7 +42,7 @@ public:
                 return;
             }
         }
-        throw "Item not found";
+        throw "Item not found.";
     }
 
     void updateItem(T itemName, T expiration, T category, int quantity) {
@@ -55,7 +55,7 @@ public:
                 return;
             }
         }
-        throw "Item not found";
+        throw "Item not found.";
     }
 
     void removeItem(T itemName) {
@@ -66,7 +66,7 @@ public:
                 return;
             }
         }
-        throw "Item not found";
+        throw "Item not found.";
     }
 
     void Total() {
@@ -84,7 +84,7 @@ public:
                 return;
             }
         }
-        throw "Item not found!!";
+        throw "Item not found.";
     }
 
     void displayItems() {
@@ -171,22 +171,23 @@ int main() {
     i1.increaseQuantity("Cerels",10);
     i1.displayItems();
     try {
-        i1.updateItem("bar","09/12/2023","Snacks",3);
+        i1.removeItem("bread");
     } catch(const char* msg) {
-        std::cout << "Could not update Protien bar. " << msg << std::endl;
-    }
-    i1.displayItems();
-    try {
-        i1.updateItem("bar","09/12/2023","Snacks",3);
-    } catch(const char* msg) {
-        std::cout << "Could not update Protien bar. " << msg << std::endl;
+        std::cout << "Could not remove bread. " << msg << std::endl;
     }
     i1.displayItems();
     i1.updateItem("Cerels","09/27/2023","Regular",4);
     i1.displayItems();
+    i1.removeItem("Milk");
+    i1.displayItems();
     i1.Total();
     try {
-        i1.searchItem("bar");
+        i1.searchItem("Cerels");
+    } catch(const char* msg) {
+        std::cout << msg << std::endl;
+    }
+     try {
+        i1.updateItem("Cerels", "09/27/2023", "Regular", 4);
     } catch(const char* msg) {
         std::cout << msg << std::endl;
     }
